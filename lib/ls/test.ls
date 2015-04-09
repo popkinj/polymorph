@@ -13,4 +13,16 @@ cJson = JSON.parse cTxt
 
 # Converto to geojson
 cGeoJson = topojson.feature cJson,cJson.objects.cascadia_bnd
-console.log cGeoJson.features
+# console.log cGeoJson.features
+
+pageWidth = 250
+pageHeight = 250
+proj = new d3.geo.mercator!
+  .center [-125,56] #  // Center of BC
+  .translate [(pageWidth/2),pageHeight/2] # Centre in window.
+  .scale 1 .<<. 8  # Can see the whole province
+
+path = d3.geo.path().projection(proj)
+cascadia = path cGeoJson.features[0]
+
+console.log cascadia
