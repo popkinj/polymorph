@@ -4,7 +4,7 @@
   "description": "Translate one svg path into another.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "lib/ls/test.ls"
+    "start": "lib/ls/start.ls"
   },
   "repository": {
     "type": "git",
@@ -12,9 +12,20 @@
   },
   "author": "Jamie Popkin",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
+    "async": "^0.9.0",
     "d3": "^3.5.5",
-    "jsdom": "^3.1.2",
-    "topojson": "^1.6.19"
+    "topojson": "^1.6.19",
+    "LiveScript": "^1.3.1",
+    "connect": "^3.3.5",
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-livereload": "^3.8.0",
+    "gulp-livescript": "^2.3.0",
+    "gulp-plumber": "^1.0.0",
+    "gulp-watch": "^4.2.4",
+    "run-sequence": "^1.0.2",
+    "serve-static": "^1.9.2"
   }
 }

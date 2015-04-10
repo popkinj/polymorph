@@ -1,19 +1,7 @@
 #!/usr/bin/env lsc
 #
-require! <[ jsdom fs d3 topojson ]> # Modules
-
-
-# Paths to resources
-d3Min = "#__dirname/../../node_modules/d3/d3.min.js"
-pathDir = "#__dirname/../paths"
-
-# The simple circle in a file
-circle = fs.readFileSync "#pathDir/perfect_circle.svg", encoding: 'utf8'
-circleSvg = "<!DOCTYPE html><html><svg id='shape'>#circle</svg></html>"
-
 
 # The cascadia boundary is in topojson
-cTxt = fs.readFileSync "#pathDir/cascadia_bnd.json", encoding: 'utf8'
 cJson = JSON.parse cTxt
 
 # Conver to geojson
@@ -34,19 +22,7 @@ cascadia = path cGeoJson.features[0] # Create path
 # Create an array of points stripping off the M and Z
 pts = cascadia.slice(1,-1).split /L/i
 lengths = []
-fillLengths = (e,w) ->
-  console.log e if e
-  # console.log w.d3.select('path').node!.getTotalLength!
-  w.close!
 
-dom = jsdom.env circleSvg, [d3Min], fillLengths
-dom.implementation.addfeature(
-  'http://www.w3.org/tr/svg11/feature#basicstructure', '1.1'
-)
-# jsdom.env(circlesvg, [d3min], filllengths)
-#   .implementation.addfeature(
-#       'http://www.w3.org/tr/svg11/feature#basicstructure', '1.1'
-#   )
 
 
 # This will get used eventually... But require dom elements

@@ -5,6 +5,7 @@
 *.backup
 *.log
 www/
+test/
 json/
 geojson/
 topojson/
