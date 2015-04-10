@@ -29,7 +29,7 @@ jsdom.env(
   done: (error,window) ->
     # console.log d3
     console.log error if error
-    console.log d3.select('#shape')
+    # console.log d3.select('#shape')
 )
 
 # Create an array of points stripping off the M and Z
