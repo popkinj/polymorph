@@ -1,11 +1,6 @@
 #!/usr/bin/env lsc
 #
 
-# The cascadia boundary is in topojson
-cJson = JSON.parse cTxt
-
-# Conver to geojson
-cGeoJson = topojson.feature cJson,cJson.objects.cascadia_bnd
 
 pageWidth = 250
 pageHeight = 250
@@ -17,13 +12,31 @@ proj = new d3.geo.mercator!
   .scale 1 .<<. 8  # Can see the whole province
 
 path = d3.geo.path().projection(proj) # Path generating function
-cascadia = path cGeoJson.features[0] # Create path
 
-# Create an array of points stripping off the M and Z
-pts = cascadia.slice(1,-1).split /L/i
+
+
+getCircle = (c) -> d3.text "perfect_circle.svg", (e,d) -> c null d
+getCascadia = (c) -> d3.json "cascadia_bnd.json", (e,d) -> c null d
+
 lengths = []
+calc = (circle,cTopoJson) ->
+
+  # Convert cascadia to geojson
+  cGeoJson = topojson.feature cTopoJson,cTopoJson.objects.cascadia_bnd
+  # Create path
+  cascadia = path cGeoJson.features[0] # Create path
+  console.log cascadia
+# Create an array of points stripping off the M and Z
+# pts = cascadia.slice(1,-1).split /L/i
 
 
+async.parallel [
+  -> getCircle it
+  -> getCascadia it
+], (err, results) ->
+  circle = results[0]
+  cascadia = results[1]
+  calc circle, cascadia
 
 # This will get used eventually... But require dom elements
 # getPointAtLength
