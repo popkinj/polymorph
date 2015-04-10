@@ -13,7 +13,6 @@ gulp.task("clean", function (cb) {
 
 gulp.task("watch", function () {
    livereload.listen();
-
    watch('lib/html/**/*.html', function (files, cb) {
      gulp.start("build-html",cb);
    });
@@ -24,6 +23,7 @@ gulp.task("watch", function () {
 
 gulp.task("build-html", function () {
   return gulp.src('lib/html/*.html').
+    pipe(plumber()).
     pipe(gulp.dest("test/")).
     pipe(livereload());
 });
