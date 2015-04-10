@@ -24,12 +24,12 @@ proj = new d3.geo.mercator!
 path = d3.geo.path().projection(proj)
 cascadia = path cGeoJson.features[0]
 jsdom.env(
-  html: "<svg id='shape'>#circle</svg>"
-  src: [d3]
-  done: (error,window) ->
+  "<svg id='shape'>#circle</svg>"
+  ["#__dirname/../../node_modules/d3/d3.min.js"]
+  (error,window) ->
     # console.log d3
     console.log error if error
-    # console.log d3.select('#shape')
+    console.log window.d3.select('#shape').html!
 )
 
 # Create an array of points stripping off the M and Z
