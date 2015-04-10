@@ -17,21 +17,16 @@ path = d3.geo.path().projection(proj) # Path generating function
 getCircle = (c) -> d3.text "perfect_circle.svg", (e,d) -> c null d
 getCascadia = (c) -> d3.json "cascadia_bnd.json", (e,d) -> c null d
 
-getLength = (pt,pts) ->
-  return 0 if pt is 1
-  tempPath = 'M'+pts.slice(0,pt).join('L')
+getLength = ->
   line = d3.select 'svg'
     .append 'path'
     .attr 'id', 'cascadia'
-    .attr 'd',tempPath
-
+    .attr 'd',it
   l = line.node!.getTotalLength!
   line.remove!
   l
 
-
-
-calc = (circle,cTopoJson) ->
+getMeasures = (cTopoJson) ->
 
   # Convert cascadia to geojson
   cGeoJson = topojson.feature cTopoJson,cTopoJson.objects.cascadia_bnd
@@ -42,23 +37,26 @@ calc = (circle,cTopoJson) ->
   # Create an array of points stripping off the M and Z
   pts = cascadia.slice(1,-1).split /L/i
 
-  completeLine = d3.select 'svg'
+  total = getLength cascadia # Get total for calculating percent
+
+  lengths = [1e-6] # First node is always at zero... or pretty much there
+  for pt in [2 to pts.length]
+    tempPath = 'M'+pts.slice(0,pt).join('L') # Create the path string
+    # console.log "#pt : #tempPath"
+    l = getLength tempPath # Get length
+    lengths.push l/total # Stuff in array
+  lengths
+
+transpose = (dists,shape) ->
+  total = getLength shape
+  line = d3.select 'svg'
     .append 'path'
     .attr 'id', 'cascadia'
-    .attr 'd',cascadia
-  total = completeLine.node!getTotalLength!
-  completeLine.remove!
-
-  lengths = []
-  for pt in [1 to pts.length - 1]
-    l = getLength pt, pts
-    lengths.push l/total * 100
-
-  console.log lengths
-
-
-  # console.log polygon.getTotalLength!
-
+    .attr 'd',shape
+    .style 'display','none'
+  coords = []
+  for l in dists then coords.push line.node!getPointAtLength(l*total)
+  coords.map -> "#{it.x},#{it.y}"
 
 
 
@@ -66,7 +64,9 @@ async.parallel [
   -> getCircle it
   -> getCascadia it
 ], (err, results) ->
-  calc results[0], results[1]
+  measures = getMeasures results[1] # Grab node distances from cascadia
+  toNodes = transpose measures, results[0] # Convert to coords on new shape
+  console.log toNodes
 
 # This will get used eventually... But require dom elements
 # getPointAtLength
