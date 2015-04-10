@@ -4,7 +4,7 @@
   "description": "Translate one svg path into another.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "lib/ls/test.ls"
   },
   "repository": {
     "type": "git",

@@ -13,7 +13,6 @@ cJson = JSON.parse cTxt
 
 # Converto to geojson
 cGeoJson = topojson.feature cJson,cJson.objects.cascadia_bnd
-# console.log cGeoJson.features
 
 pageWidth = 250
 pageHeight = 250
@@ -25,4 +24,9 @@ proj = new d3.geo.mercator!
 path = d3.geo.path().projection(proj)
 cascadia = path cGeoJson.features[0]
 
-console.log cascadia
+# Create an array of points stripping off the M and Z
+cascadia.slice(1,-1).split /L/i
+
+# This will get used eventually... But require dom elements
+# getPointAtLength
+# getTotalLength
