@@ -20,20 +20,12 @@ getCascadia = (c) -> d3.json "cascadia_bnd.json", (e,d) -> c null d
 getLength = ->
   line = d3.select 'svg'
     .append 'path'
-    .attr 'id', 'cascadia'
     .attr 'd',it
   l = line.node!.getTotalLength!
   line.remove!
   l
 
-getMeasures = (cTopoJson) ->
-
-  # Convert cascadia to geojson
-  cGeoJson = topojson.feature cTopoJson,cTopoJson.objects.cascadia_bnd
-
-  # Create path
-  cascadia = path cGeoJson.features[0] # Create path
-
+getMeasures = (cascadia) ->
   # Create an array of points stripping off the M and Z
   pts = cascadia.slice(1,-1).split /L/i
 
@@ -51,7 +43,6 @@ transpose = (dists,shape) ->
   total = getLength shape
   line = d3.select 'svg'
     .append 'path'
-    .attr 'id', 'cascadia'
     .attr 'd',shape
     .style 'display','none'
   coords = []
@@ -59,14 +50,33 @@ transpose = (dists,shape) ->
   coords.map -> "#{it.x},#{it.y}"
 
 
-
 async.parallel [
   -> getCircle it
   -> getCascadia it
 ], (err, results) ->
-  measures = getMeasures results[1] # Grab node distances from cascadia
-  toNodes = transpose measures, results[0] # Convert to coords on new shape
-  console.log toNodes
+  cTopoJson = results[1] # Cascadia
+
+  # Convert cascadia to geojson
+  cGeoJson = topojson.feature cTopoJson,cTopoJson.objects.cascadia_bnd
+
+  # Create path
+  cascadia = path cGeoJson.features[0] # Create path
+
+  measures = getMeasures cascadia # Grab node distances from cascadia
+  newNodes = transpose measures, results[0] # Convert to coords on new shape
+  newPath = "M#{newNodes.join 'L'}Z"
+  d3.select 'svg'
+    .append 'path'
+    .attr 'id', 'cascadia'
+    .attr 'd',newPath
+    .style 'fill','none'
+    .style 'stroke','black'
+    .transition!
+    .duration 5000
+    .attr 'd', cascadia
+    .transition!
+    .duration 5000
+    .attr 'd', newPath
 
 # This will get used eventually... But require dom elements
 # getPointAtLength
