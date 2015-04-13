@@ -6,7 +6,7 @@ pageHeight = window.innerHeight
 # This is what d3 uses to create a pixel based path from 
 # a lat and long polygon.
 proj = new d3.geo.mercator!
-  .center [-125,56] #  // Center of BC
+  .center [-125,51] #  // Center of BC
   .translate [(pageWidth/2),pageHeight/2] # Centre in window.
   .scale 1 .<<. 9  # Can see the whole province
 
