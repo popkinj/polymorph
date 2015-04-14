@@ -32,5 +32,16 @@ polymorph.transpose = (from,to) ->
       lengths.push l/total # Stuff in array
     lengths
 
-  measures = getMeasures to # Grab node distances from destination path
-  "M#{measures.join 'L'}Z"
+  transpose = (dists,shape) ->
+    total = getLength shape
+    line = d3.select 'svg'
+      .append 'path'
+      .attr 'd',shape
+      .style 'display','none'
+    coords = []
+    for l in dists then coords.push line.node!getPointAtLength(l*total)
+    coords.map -> "#{it.x},#{it.y}"
+
+  measures = getMeasures from # Grab node distances from destination path
+  newShape = transpose measures, to
+  "M#{newShape.join 'L'}Z"

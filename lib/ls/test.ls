@@ -1,8 +1,8 @@
 # test.ls
 # Testing out polymorph
-
-
-
+# Pulling in three datasets then converting to paths with 
+# d3. Then pluggin into polymorph to calculate the transpose.
+# Finally animating back and fourth with d3.
 
 pageWidth = window.innerWidth
 pageHeight = window.innerHeight
@@ -16,50 +16,17 @@ proj = new d3.geo.mercator!
 
 path = d3.geo.path().projection(proj) # Path generating function
 
-
-
+# Fetch our test data
 getCircle = (c) -> d3.text "perfect_circle.svg", (e,d) -> c null d
 getCascadia = (c) -> d3.json "cascadia_bnd.json", (e,d) -> c null d
 getCountries = (c) -> d3.json "countries.json", (e,d) -> c null d
-
-getLength = ->
-  line = d3.select 'svg'
-    .append 'path'
-    .attr 'd',it
-  l = line.node!.getTotalLength!
-  line.remove!
-  l
-
-getMeasures = (cascadia) ->
-  # Create an array of points stripping off the M and Z
-  pts = cascadia.slice(1,-1).split /L/i
-
-  total = getLength cascadia # Get total for calculating percent
-
-  lengths = [1e-6] # First node is always at zero... or pretty much there
-  for pt in [2 to pts.length]
-    tempPath = 'M'+pts.slice(0,pt).join('L') # Create the path string
-    l = getLength tempPath # Get length
-    lengths.push l/total # Stuff in array
-  lengths
-
-transpose = (dists,shape) ->
-  total = getLength shape
-  line = d3.select 'svg'
-    .append 'path'
-    .attr 'd',shape
-    .style 'display','none'
-  coords = []
-  for l in dists then coords.push line.node!getPointAtLength(l*total)
-  coords.map -> "#{it.x},#{it.y}"
-
 
 async.parallel [
   -> getCircle it
   -> getCascadia it
   -> getCountries it
 ], (err, results) ->
-  circle = results[0]
+  circle = results[0] # Simple circle
   cTopoJson = results[1] # Cascadia
   cstTopoJson = results[2] # Countries
 
@@ -71,14 +38,13 @@ async.parallel [
   cascadia = path cGeoJson.features[0] # Create path
 
   /*
-   Testing as a module
+    Here's the new path
+    We're basically taking a more complex shape
+    and transposing all the nodes onto a simple one (the circle)
+    This seeds the circle with the same # of nodes as the complex 
+    shape. Thus allowing for a seamless transition between shapes.
   */
-  output = polymorph.transpose circle,cascadia
-  console.log output
-
-  measures = getMeasures cascadia # Grab node distances from cascadia
-  newNodes = transpose measures, results[0] # Convert to coords on new shape
-  newPath = "M#{newNodes.join 'L'}Z"
+  newPath = polymorph.transpose cascadia, circle
 
   d3.select 'svg'
     .selectAll 'path.country'
@@ -107,7 +73,8 @@ async.parallel [
     .attr 'id', 'cascadia'
     .attr 'd',newPath
     .style 'fill','none'
-    .style 'stroke','black'
+    .style 'stroke-width','2px'
+    .style 'stroke','#545454'
     .transition!
     .duration 5000
     .attr 'd', cascadia
@@ -115,4 +82,3 @@ async.parallel [
     .delay 10000
     .duration 5000
     .attr 'd', newPath
-
