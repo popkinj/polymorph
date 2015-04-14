@@ -69,6 +69,29 @@ async.parallel [
   measures = getMeasures cascadia # Grab node distances from cascadia
   newNodes = transpose measures, results[0] # Convert to coords on new shape
   newPath = "M#{newNodes.join 'L'}Z"
+
+  d3.select 'svg'
+    .selectAll 'path.country'
+    .data cstGeoJson.features.filter ->
+      # Just North America please
+      it.properties.name.match /(Canada|Mexico|United States)/
+    .enter!
+    .append 'path'
+    .attr 'class','country'
+    .attr 'd', path
+    .style 'fill','none'
+    .style 'opacity',1e-6
+    .style 'fill','#E4E4E4'
+    .style 'stroke-linejoin','round'
+    .transition!
+    .delay 5000
+    .duration 500
+    .style 'opacity',1
+    .transition!
+    .delay 10000
+    .duration 500
+    .style 'opacity',1e-6
+
   d3.select 'svg'
     .append 'path'
     .attr 'id', 'cascadia'
@@ -83,24 +106,3 @@ async.parallel [
     .duration 5000
     .attr 'd', newPath
 
-  d3.select 'svg'
-    .selectAll 'path.country'
-    .data cstGeoJson.features.filter ->
-      # Just North America please
-      it.properties.name.match /(Canada|Mexico|United States)/
-    .enter!
-    .append 'path'
-    .attr 'class','country'
-    .attr 'd', path
-    .style 'fill','none'
-    .style 'opacity',1e-6
-    .style 'stroke','black'
-    .style 'stroke-linejoin','round'
-    .transition!
-    .delay 5000
-    .duration 500
-    .style 'opacity',1
-    .transition!
-    .delay 10000
-    .duration 500
-    .style 'opacity',1e-6
