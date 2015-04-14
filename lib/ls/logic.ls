@@ -1,13 +1,5 @@
-# test.ls
-# Testing out polymorph
-
-
-/*
- Testing as a module
-*/
-output = polymorph.transpose 'circle','square'
-console.log output
-
+# test.lsc
+# Source file for testing polymorph logic.
 
 pageWidth = window.innerWidth
 pageHeight = window.innerHeight

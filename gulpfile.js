@@ -29,7 +29,11 @@ gulp.task("build-html", function () {
 });
 
 gulp.task("build-js", function () {
-  return gulp.src('lib/ls/test.ls').
+  return gulp.src([
+      'lib/ls/test.ls',
+      'lib/ls/polymorph.ls',
+      'lib/ls/logic.ls'
+    ]).
     pipe(plumber()).
     pipe(livescript({bare: true})).
     pipe(gulp.dest("test/")).
