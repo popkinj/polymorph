@@ -2,11 +2,6 @@
 # Testing out polymorph
 
 
-/*
- Testing as a module
-*/
-output = polymorph.transpose 'circle','square'
-console.log output
 
 
 pageWidth = window.innerWidth
@@ -64,6 +59,7 @@ async.parallel [
   -> getCascadia it
   -> getCountries it
 ], (err, results) ->
+  circle = results[0]
   cTopoJson = results[1] # Cascadia
   cstTopoJson = results[2] # Countries
 
@@ -73,6 +69,12 @@ async.parallel [
 
   # Create path
   cascadia = path cGeoJson.features[0] # Create path
+
+  /*
+   Testing as a module
+  */
+  output = polymorph.transpose circle,cascadia
+  console.log output
 
   measures = getMeasures cascadia # Grab node distances from cascadia
   newNodes = transpose measures, results[0] # Convert to coords on new shape

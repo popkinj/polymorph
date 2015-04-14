@@ -32,4 +32,5 @@ polymorph.transpose = (from,to) ->
       lengths.push l/total # Stuff in array
     lengths
 
-  measures = getMeasures from # Grab node distances from cascadia
+  measures = getMeasures to # Grab node distances from destination path
+  "M#{measures.join 'L'}Z"

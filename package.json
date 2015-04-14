@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "lib/ls/start.ls",
-    "run": "gulp watch"
+    "dev": "gulp",
+    "watch": "gulp watch"
   },
   "repository": {
     "type": "git",
