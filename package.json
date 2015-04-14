@@ -4,7 +4,8 @@
   "description": "Translate one svg path into another.",
   "main": "dist/index.js",
   "scripts": {
-    "start": "lib/ls/start.ls"
+    "start": "lib/ls/start.ls",
+    "run": "gulp watch"
   },
   "repository": {
     "type": "git",

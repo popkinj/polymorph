@@ -16,6 +16,7 @@ path = d3.geo.path().projection(proj) # Path generating function
 
 getCircle = (c) -> d3.text "perfect_circle.svg", (e,d) -> c null d
 getCascadia = (c) -> d3.json "cascadia_bnd.json", (e,d) -> c null d
+getCountries = (c) -> d3.json "countries.json", (e,d) -> c null d
 
 getLength = ->
   line = d3.select 'svg'
@@ -53,11 +54,14 @@ transpose = (dists,shape) ->
 async.parallel [
   -> getCircle it
   -> getCascadia it
+  -> getCountries it
 ], (err, results) ->
   cTopoJson = results[1] # Cascadia
+  cstTopoJson = results[2] # Countries
 
-  # Convert cascadia to geojson
+  # Convert to geojson
   cGeoJson = topojson.feature cTopoJson,cTopoJson.objects.cascadia_bnd
+  cstGeoJson = topojson.feature cstTopoJson,cstTopoJson.objects.countries
 
   # Create path
   cascadia = path cGeoJson.features[0] # Create path
@@ -75,9 +79,28 @@ async.parallel [
     .duration 5000
     .attr 'd', cascadia
     .transition!
+    .delay 10000
     .duration 5000
     .attr 'd', newPath
 
-# This will get used eventually... But require dom elements
-# getPointAtLength
-# getTotalLength
+  d3.select 'svg'
+    .selectAll 'path.country'
+    .data cstGeoJson.features.filter ->
+      # Just North America please
+      it.properties.name.match /(Canada|Mexico|United States)/
+    .enter!
+    .append 'path'
+    .attr 'class','country'
+    .attr 'd', path
+    .style 'fill','none'
+    .style 'opacity',1e-6
+    .style 'stroke','black'
+    .style 'stroke-linejoin','round'
+    .transition!
+    .delay 5000
+    .duration 500
+    .style 'opacity',1
+    .transition!
+    .delay 10000
+    .duration 500
+    .style 'opacity',1e-6
