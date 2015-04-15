@@ -8,7 +8,7 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload');
 
 gulp.task("clean", function (cb) {
-  return del(['test'],cb);
+  return del(['test','polymorph.js'],cb);
 });
 
 gulp.task("watch", function () {
@@ -29,6 +29,11 @@ gulp.task("build-html", function () {
 });
 
 gulp.task("build-js", function () {
+  gulp.src(['lib/ls/polymorph.ls']).
+    pipe(plumber()).
+    pipe(livescript({bare: true})).
+    pipe(gulp.dest("./"));
+
   return gulp.src([
       'lib/ls/test.ls',
       'lib/ls/polymorph.ls',
