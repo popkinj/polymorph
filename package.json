@@ -2,7 +2,7 @@
   "name": "polymorph",
   "version": "1.0.0",
   "description": "Translate one svg path into another.",
-  "main": "dist/index.js",
+  "main": "polymorph.js",
   "scripts": {
     "start": "lib/ls/start.ls",
     "dev": "gulp",
