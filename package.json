@@ -1,6 +1,6 @@
 {
   "name": "polymorph",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Translate one svg path into another.",
   "main": "polymorph.js",
   "scripts": {
