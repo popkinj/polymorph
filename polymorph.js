@@ -41,14 +41,14 @@ polymorph.transpose = function(from, to){
     }
   };
   transpose = function(dists, shape){
-    var total, line;
+    var total, line, coords, i$, len$, l;
     total = getLength(shape);
-    line = document.createElementNS('html://www.w3.org/2000/svg', 'path');
-    line.id = 'test';
-    line.setAttributeNS('html://www.w3.org/2000/svg', 'd', shape);
-    line.setAttributeNS('html://www.w3.org/2000/svg', 'style', 'display: none');
-    svg.appendChild(line);
-    debugger;
+    line = d3.select('svg').append('path').attr('d', shape).style('display', 'none');
+    coords = [];
+    for (i$ = 0, len$ = dists.length; i$ < len$; ++i$) {
+      l = dists[i$];
+      coords.push(line.node().getPointAtLength(l * total));
+    }
     return coords.map(function(it){
       return it.x + "," + it.y;
     });

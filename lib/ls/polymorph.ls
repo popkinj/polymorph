@@ -33,24 +33,24 @@ polymorph.transpose = (from,to) ->
 
   transpose = (dists,shape) ->
     total = getLength shape
-    line = document.createElementNS 'html://www.w3.org/2000/svg','path'
-    line.id = 'test'
-    line.setAttributeNS 'html://www.w3.org/2000/svg', 'd', shape
-    line.setAttributeNS 'html://www.w3.org/2000/svg', 'style', 'display: none'
-    svg.appendChild line
-    debugger
+    # line = document.createElementNS 'html://www.w3.org/2000/svg','path'
+    # line.id = 'test'
+    # line.setAttributeNS 'html://www.w3.org/2000/svg', 'd', shape
+    # line.setAttributeNS 'html://www.w3.org/2000/svg', 'style', 'display: none'
+    # svg.appendChild line
     # console.log line
     # test = document.getElementById 'test'
     # console.log test
     # console.log test.getPointAtLength 14
     #
     #### This works but it's d3
-    # line = d3.select 'svg'
-    #   .append 'path'
-    #   .attr 'd',shape
-    #   .style 'display','none'
-    # coords = []
-    # for l in dists then coords.push line.node!getPointAtLength(l*total)
+    line = d3.select 'svg'
+      .append 'path'
+      .attr 'd',shape
+      .style 'display','none'
+    # console.log line
+    coords = []
+    for l in dists then coords.push line.node!getPointAtLength(l*total)
     coords.map -> "#{it.x},#{it.y}"
 
   measures = getMeasures from # Grab node distances from destination path

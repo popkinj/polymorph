@@ -46,27 +46,27 @@ async.parallel [
   */
   newPath = polymorph.transpose cascadia, circle
 
-  # d3.select 'svg'
-  #   .selectAll 'path.country'
-  #   .data cstGeoJson.features.filter ->
-  #     # Just North America please
-  #     it.properties.name.match /(Canada|Mexico|United States)/
-  #   .enter!
-  #   .append 'path'
-  #   .attr 'class','country'
-  #   .attr 'd', path
-  #   .style 'fill','none'
-  #   .style 'opacity',1e-6
-  #   .style 'fill','#E4E4E4'
-  #   .style 'stroke-linejoin','round'
-    # .transition!
-    # .delay 5000
-    # .duration 500
-    # .style 'opacity',1
-    # .transition!
-    # .delay 10000
-    # .duration 500
-    # .style 'opacity',1e-6
+  d3.select 'svg'
+    .selectAll 'path.country'
+    .data cstGeoJson.features.filter ->
+      # Just North America please
+      it.properties.name.match /(Canada|Mexico|United States)/
+    .enter!
+    .append 'path'
+    .attr 'class','country'
+    .attr 'd', path
+    .style 'fill','none'
+    .style 'opacity',1e-6
+    .style 'fill','#E4E4E4'
+    .style 'stroke-linejoin','round'
+    .transition!
+    .delay 5000
+    .duration 500
+    .style 'opacity',1
+    .transition!
+    .delay 10000
+    .duration 500
+    .style 'opacity',1e-6
 
   d3.select 'svg'
     .append 'path'
@@ -75,10 +75,10 @@ async.parallel [
     .style 'fill','none'
     .style 'stroke-width','2px'
     .style 'stroke','#545454'
-    # .transition!
-    # .duration 5000
-    # .attr 'd', cascadia
-    # .transition!
-    # .delay 10000
-    # .duration 5000
-    # .attr 'd', newPath
+    .transition!
+    .duration 5000
+    .attr 'd', cascadia
+    .transition!
+    .delay 10000
+    .duration 5000
+    .attr 'd', newPath
