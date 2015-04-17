@@ -32,7 +32,8 @@ gulp.task("build-js", function () {
   gulp.src(['lib/ls/polymorph.ls']).
     pipe(plumber()).
     pipe(livescript({bare: true})).
-    pipe(gulp.dest("./"));
+    pipe(gulp.dest("./")).
+    pipe(livereload());
 
   return gulp.src([
       'lib/ls/test.ls',
@@ -41,8 +42,8 @@ gulp.task("build-js", function () {
     ]).
     pipe(plumber()).
     pipe(livescript({bare: true})).
-    pipe(gulp.dest("test/")).
-    pipe(livereload());
+    pipe(gulp.dest("test/"));
+    // pipe(livereload());
 });
 
 gulp.task("build-data", function () {

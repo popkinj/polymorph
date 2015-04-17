@@ -1,6 +1,6 @@
 var polymorph;
 polymorph = {
-  version: '0.1'
+  version: '1.1'
 };
 polymorph.transpose = function(from, to){
   var svg, getLength, getMeasures, transpose, measures, newShape;
@@ -41,19 +41,20 @@ polymorph.transpose = function(from, to){
     }
   };
   transpose = function(dists, shape){
-    var total, line, coords, i$, len$, l;
+    var total, line;
     total = getLength(shape);
-    line = d3.select('svg').append('path').attr('d', shape).style('display', 'none');
-    coords = [];
-    for (i$ = 0, len$ = dists.length; i$ < len$; ++i$) {
-      l = dists[i$];
-      coords.push(line.node().getPointAtLength(l * total));
-    }
+    line = document.createElementNS('html://www.w3.org/2000/svg', 'path');
+    line.id = 'test';
+    line.setAttributeNS('html://www.w3.org/2000/svg', 'd', shape);
+    line.setAttributeNS('html://www.w3.org/2000/svg', 'style', 'display: none');
+    svg.appendChild(line);
+    debugger;
     return coords.map(function(it){
       return it.x + "," + it.y;
     });
   };
   measures = getMeasures(from);
   newShape = transpose(measures, to);
+  svg.parentNode.removeChild(svg);
   return "M" + newShape.join('L') + "Z";
 };

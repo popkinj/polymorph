@@ -1,9 +1,8 @@
 polymorph =
-  version: '0.1'
+  version: '1.1'
 polymorph.transpose = (from,to) ->
   # Insert temporary svg element to do our calculations
   svg = document.createElementNS 'http://www.w3.org/2000/svg','svg'
-  # svg = document.createElement 'svg'
   svg.id = 'polymorph-temp-canvas'
   document.body.appendChild svg
 
@@ -34,14 +33,30 @@ polymorph.transpose = (from,to) ->
 
   transpose = (dists,shape) ->
     total = getLength shape
-    line = d3.select 'svg'
-      .append 'path'
-      .attr 'd',shape
-      .style 'display','none'
-    coords = []
-    for l in dists then coords.push line.node!getPointAtLength(l*total)
+    line = document.createElementNS 'html://www.w3.org/2000/svg','path'
+    line.id = 'test'
+    line.setAttributeNS 'html://www.w3.org/2000/svg', 'd', shape
+    line.setAttributeNS 'html://www.w3.org/2000/svg', 'style', 'display: none'
+    svg.appendChild line
+    debugger
+    # console.log line
+    # test = document.getElementById 'test'
+    # console.log test
+    # console.log test.getPointAtLength 14
+    #
+    #### This works but it's d3
+    # line = d3.select 'svg'
+    #   .append 'path'
+    #   .attr 'd',shape
+    #   .style 'display','none'
+    # coords = []
+    # for l in dists then coords.push line.node!getPointAtLength(l*total)
     coords.map -> "#{it.x},#{it.y}"
 
   measures = getMeasures from # Grab node distances from destination path
   newShape = transpose measures, to
+
+  # Remove temporary svg element
+  svg.parentNode.removeChild svg
+
   "M#{newShape.join 'L'}Z"
