@@ -7,3 +7,5 @@ var newShape = polymorph.transpose(firstShape,secondShape);
 This makes the assumption that *firstShape* is of the format *M43 43 L 54 32 L 43 65Z"*. The *secondShape* can be any [SVG Path](http://www.w3schools.com/svg/svg_path.asp) format.
 
 It makes most sense to transpose a more complex shape onto a simpler one. This way you don't lose any detail. But it works either way.
+
+Here is an [example](http://codepen.io/jamiepopkin/pen/qdEBVy) of what you can do with the output. Aong with the help of a interpolator/animation engine like [d3](d3js.org).
