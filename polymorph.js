@@ -12,7 +12,7 @@ polymorph = {
  ## transpose
  Duplicate node positioning from one shape onto another
  @param from {string} SVG shape containing the nodes to be copied
- @param to {string} Resulting SVG shape which will contain a 
+ @param to {string} Resulting SVG shape which will contain a
  representation of the nodes from the first shape.
 */
 polymorph.transpose = function(from, to){
@@ -88,5 +88,13 @@ polymorph.transpose = function(from, to){
   measures = getMeasures(from);
   newShape = transpose(measures, to);
   svg.parentNode.removeChild(svg);
-  return "M" + newShape.join('L') + "Z";
+
+  var newPath = "M" + newShape.join('L');
+
+  // Close shape if input shape is closed
+  if (from.indexOf("Z") > -1) {
+      newPath += "Z";
+  }
+
+  return newPath;
 };
